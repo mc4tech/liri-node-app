@@ -68,67 +68,63 @@ function myTweets() {
 };
 
 function spotify() {
+	
 	var Spotify = require('node-spotify-api');
+ 	
  	var song = process.argv[3];
+
 	var spotify = new Spotify({
 		id: spotId,
 	  	secret: spotSec
 	});
 	 
-	if(song === undefined){
+	if(song === undefined || song === ""){
 		song = "the sign ace of base";
 	}
 	spotify.search({ type: 'track', query: song }, function(err, data) {
 	  	if (err) {
 	    	return console.log('Error occurred: ' + err);
 	    	console.log('You must enter a valid song ex : ' + "the sign ace of base");
-	  	}
-	 	for(var i = 0; i < data.tracks.items.length && i < 5; i ++) {
-		  	console.log("Song : " + data.tracks.items[i].name);
-	     	console.log("Artist : " + data.tracks.items[i].artists.name);
-	        console.log("Album : " + data.tracks.items[i].album.name);
-	        console.log("Spotify URL : " + data.tracks.items[i].album.external_urls.spotify + "\n");
-    	}
-	});
+	  	}else if(song != "the sign ace of base") {
+		 	for(var i = 0; i < data.tracks.items.length && i < 5; i ++) {
+			  	console.log("Song : " + data.tracks.items[i].name);
+		     	console.log("Artist : " + data.tracks.items[i].artists[0].name);
+		        console.log("Album : " + data.tracks.items[i].album.name);
+		        console.log("Spotify URL : " + data.tracks.items[i].album.external_urls.spotify + "\n");
+	    	}
+	    }   console.log("Song : " + data.tracks.items[0].name);
+		 	console.log("Artist : " + data.tracks.items[0].artists[0].name);
+		    console.log("Album : " + data.tracks.items[0].album.name);
+		    console.log("Spotify URL : " + data.tracks.items[0].album.external_urls.spotify);
+		});
 };
+
 
 function movie() {
 
 	var request = require("request");
 
-	// Create an empty variable for holding the movie name
 	var movieName = "";
 
-	// Loop through all the words in the node argument
-	// And do a little for-loop magic to handle the inclusion of "+"s
+	// Loop through all the words in the nodeArgs
 	for (var i = 3; i < nodeArgs.length; i++) {
-
 	  if (i > 3 && i < nodeArgs.length) {
-
 	    movieName = movieName + "+" + nodeArgs[i];
-
 	  }
-
 	  else {
-
 	    movieName += nodeArgs[i];
-
 	  }
 	}
 
 	// Then run a request to the OMDB API with the movie specified
 	var queryUrl = "http://www.omdbapi.com/?t=" + movieName + "&y=&plot=short&apikey=40e9cece";
 
-	// This line is just to help us debug against the actual URL.
-	console.log(queryUrl);
-
 	request(queryUrl, function(error, response, body) {
 
-	  // If the request is successful
+	  // tests if the request is successful
 	  if (!error && response.statusCode === 200) {
 	  	// console.log(body);
 	    // Parse the body of the site and recover just the imdbRating
-	    // (Note: The syntax below for parsing isn't obvious. Just spend a few moments dissecting it).
 	    console.log("Title : " + JSON.parse(body).Title);
         console.log("Year : " + JSON.parse(body).Year);
         console.log("IMDB Rating : " + JSON.parse(body).Ratings[0].Value);
@@ -137,7 +133,10 @@ function movie() {
         console.log("Language : " + JSON.parse(body).Language);
         console.log("Plot : " + JSON.parse(body).Plot);
         console.log("Actors : " + JSON.parse(body).Actors + "\n");
+	  }else{
+	  	console.log(error);
 	  }
+
 	});
 
 };
