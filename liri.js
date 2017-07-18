@@ -75,14 +75,20 @@ function spotify() {
 	  	secret: spotSec
 	});
 	 
+	if(song === undefined){
+		song = "the sign ace of base";
+	}
 	spotify.search({ type: 'track', query: song }, function(err, data) {
 	  	if (err) {
 	    	return console.log('Error occurred: ' + err);
-	  	}else if(song )
-	 
-	  	console.log(data.tracks.items[0].name);
-     	console.log(data.tracks.items[0].artists[0].name);
-        console.log(data.tracks.items[0].album.name);
-        console.log(data.tracks.items[0].album.external_urls); 
+	    	console.log('You must enter a valid song ex : ' + "the sign ace of base");
+	  	}
+	 	for(var i = 0; i < data.tracks.items.length && i < 5; i ++) {
+		  	console.log("Song : " + data.tracks.items[i].name);
+	     	console.log("Artist : " + data.tracks.items[i].artists.name);
+	        console.log("Album : " + data.tracks.items[i].album.name);
+	        console.log("Spotify URL : ");
+	        console.log(data.tracks.items[i].album.external_urls); 
+    	}
 	});
 };
