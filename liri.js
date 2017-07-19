@@ -33,7 +33,7 @@ switch (nodeArgs[2]) {
 	break;
 
 	case "do-what-it-says":
-	doIt();
+	doThis();
 	break;
 
 	default:
@@ -110,12 +110,16 @@ function movie() {
 	for (var i = 3; i < nodeArgs.length; i++) {
 	  if (i > 3 && i < nodeArgs.length) {
 	    movieName = movieName + "+" + nodeArgs[i];
-	  }
-	  else {
+	  }else {
 	    movieName += nodeArgs[i];
 	  }
-	}
+	};
 
+	if(movieName === undefined || movieName === ""){
+		movieName = "Mr. Nobody";
+	};
+
+	// console.log(movieName);
 	// Then run a request to the OMDB API with the movie specified
 	var queryUrl = "http://www.omdbapi.com/?t=" + movieName + "&y=&plot=short&apikey=40e9cece";
 
@@ -139,4 +143,62 @@ function movie() {
 
 	});
 
+};
+
+function doThis() {
+	// fs is a core Node package for reading and writing files
+	var fs = require("fs");
+
+	fs.readFile("random.txt", "utf8", function(error, data) {
+		// If the code experiences any errors it will log the error to the console.
+	    if (error) {
+	  	  return console.log( error);
+	  	};
+	  	// console.log(data);
+
+	  	var dataArr = data.split(",");
+	  	// console.log(dataArr);
+
+	  	function testFile(arg) {
+	  		if(arg != "my-tweets" || "spotify-this-song" || "movie-this" || "do-what-it-says") {
+	  			// console.log("arg 0 " + arg);
+	  			process.argv[3] = arg;
+	  		}
+	  		// else {
+	  			// console.log("arg 1 " + arg);
+	  		// };
+	  	};
+
+	  	// for(var i = 0; i < dataArr.length; i++) {
+
+	  		// var j = ++i;
+	  		var arg = dataArr[1];
+	  		// console.log("arg : " + arg);
+	  		// console.log("data Arr : " + dataArr[0]);
+			// The switch-case will direct which function gets run.
+			switch (dataArr[0]) {
+				case "my-tweets":
+				testFile(arg);
+				myTweets();
+				break;
+
+				case "spotify-this-song":
+				testFile(arg);
+				spotify();
+				break;
+
+				case "movie-this":
+				movie();
+				break;
+
+				case "do-what-it-says":
+				doThis();
+				break;
+
+				default:
+				console.log("File does not contain command.");
+			};
+		// };
+
+	});
 };
